@@ -7,7 +7,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const sandbox = {window:{}};
 vm.runInNewContext(fs.readFileSync(path.join(root,'floorplan-data.js'),'utf8'),sandbox);
 const p = sandbox.window.FLOORPLAN77B;
-assert.equal(p.id,'77B-wall-revision-v2');
+assert.equal(p.id,'77B-developer-fitout-v3');
 assert.equal(p.units,'mm');
 assert.equal(p.windows.length,p.windowHeights.length);
 assert.deepEqual(Array.from(p.dimensions.chains[0].segments),[2900,2400,2300,3500]);
@@ -64,6 +64,15 @@ for(const r of [entry,dining]) for(let y=175;y<5550;y+=25)for(let x=10675;x<maxX
 }
 const cabinet = p.furniture.find(f=>f[0]==='shoecab');
 assert.ok(cabinet[2]+cabinet[5]/2<=10850,'Default shoe cabinet clears the recessed wall');
+assert.ok(cabinet[3]-cabinet[4]/2>=1150,'Cabinet must clear the original inward entrance door sweep');
+const barWall=p.walls.find(w=>w[0]===7750&&w[1]===2600&&w[2]===9650);
+assert.equal(barWall[4],'low','Kitchen south boundary must not be a full-height wall');
+assert.ok(barWall[5]<1000,'Kitchen counter wall is below sightline');
+assert.ok(p.furniture.find(f=>f[0]==='stove')[3]<800,'Stove belongs to the north cooking wall');
+assert.ok(p.slides.find(s=>s.v).frosted,'Kitchen-to-foyer door uses textured glass');
+assert.equal(p.rooms.find(r=>r.id==='mbath').mat,'mosaic');
+assert.equal(p.rooms.find(r=>r.id==='dining').mat,'herringbone');
+assert.ok(p.fitout.guardWindowIndices.length>=6,'Bedroom windows have safety rails');
 const html = fs.readFileSync(path.join(root,'index.html'),'utf8');
 for(const match of html.matchAll(/<script(?![^>]*type="(?:module|importmap)")[^>]*>([\s\S]*?)<\/script>/g)) new vm.Script(match[1]);
 for(const file of ['77b-interface.js','floorplan-data.js']) new vm.Script(fs.readFileSync(path.join(root,file),'utf8'));
