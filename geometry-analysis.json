@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "title": "77B 图纸尺寸追溯及右墙修订 v2",
+  "title": "77B 图纸尺寸追溯、右墙修订及精装复原 v3",
   "units": "mm",
   "sourcePriority": [
     {
@@ -14,6 +14,10 @@
     {
       "source": "image3",
       "role": "用户明确指出数据错误，禁止用于模型尺寸"
+    },
+    {
+      "source": "developer-fitout",
+      "role": "用户提供10张77B精装全景截图与开发商VR。只补装修形态、厨具朝向与窗型分段，不替代image1已标净尺寸。"
     }
   ],
   "coordinateSystem": {
@@ -414,5 +418,105 @@
       ]
     ],
     "note": "约300mm偏移、转折坐标均为按补充图拟合，非开发商标注；阳台不在本次已实施变更范围。"
+  },
+  "fitoutRevision": {
+    "version": 3,
+    "source": "开发商77B精装全景与用户提供的10张截图",
+    "status": "derived",
+    "tourUrl": "https://infishow.ideamake.cn/icp/guangzhou-nanzhanwan_19664/yangbanjianhuizong_6.html?showmenu=reset&showparam=scene_keting_86bbkic&showpage=vr_tour&timestamp=1754884477395&read_source=2",
+    "note": "装修形态按77B照片复原；柜体、台面、玻璃分段、护栏和吊顶高度未标尺寸，采用拟合值。照片中的交付状态无活动家具；床、沙发、餐桌和冰箱仍为可编辑示例。",
+    "kitchen": {
+      "bar": {
+        "x1": 7750,
+        "x2": 9650,
+        "y1": 2000,
+        "y2": 2800,
+        "height": 850
+      },
+      "glass": {
+        "x": 7790,
+        "y1": 2030,
+        "y2": 2630,
+        "height": 2400
+      },
+      "stove": {
+        "cx": 8700,
+        "cy": 450
+      },
+      "sink": {
+        "cx": 8050,
+        "cy": 1600
+      }
+    },
+    "entryCabinet": {
+      "cx": 10675,
+      "cy": 2000,
+      "width": 1600,
+      "depth": 350,
+      "rot": 90,
+      "backFill": [
+        10850,
+        1200,
+        11150,
+        1900
+      ]
+    },
+    "guardWindowIndices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "bathrooms": [
+      {
+        "id": "mbath",
+        "bounds": [
+          2600,
+          2650,
+          5050,
+          4200
+        ],
+        "vanity": {
+          "cx": 3100,
+          "cy": 2900,
+          "width": 800,
+          "depth": 500,
+          "rot": 0
+        },
+        "shower": {
+          "cx": 4600,
+          "cy": 3425,
+          "width": 900,
+          "depth": 1550
+        }
+      },
+      {
+        "id": "gbath",
+        "bounds": [
+          5250,
+          2650,
+          7700,
+          4200
+        ],
+        "vanity": {
+          "cx": 7150,
+          "cy": 2900,
+          "width": 800,
+          "depth": 500,
+          "rot": 0
+        },
+        "shower": {
+          "cx": 5700,
+          "cy": 3425,
+          "width": 900,
+          "depth": 1550
+        }
+      }
+    ],
+    "floorplanId": "77B-developer-fitout-v3",
+    "entranceClearance": "保留东侧铰点，门扇向内1000扫掠最远y1150；玄关柜北端y1200。柜后接墙补板、台面/窗分段等均为拟合。"
   }
 }

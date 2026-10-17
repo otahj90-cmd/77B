@@ -344,7 +344,7 @@ main.drawer-panel #fab{opacity:0;visibility:hidden}
   </footer>
 </div>
 <div id="toast" role="status" aria-live="polite"></div>
-<script src="./floorplan-data.js"></script>
+<script src="./floorplan-data.js?v=3"></script>
 <script>
 /* ======================= 多语言（中文 / English，默认中文） ======================= */
 const LANG_KEY = 'floorplan-77b-lang';
@@ -358,6 +358,8 @@ const tr = (zh, en) => LANG === 'en' ? en : LANG === 'zht' ? s2t(zh) : zh;
 // 内置的房间 / 材料 / 家具名称存的是中文；英文界面下显示译名，用户自己改过的名称原样显示
 const NAMES_EN = {
   '主卧室':'Master Bedroom', '主卫浴':'Master Bath', '小孩房':"Kids' Room", '客卫浴':'Guest Bath', '洗衣阳台':'Laundry Balcony',
+  '主卧':'Master Bedroom','次卧':'Bedroom','儿童房':"Children's Room",'主卫':'Master Bath','公卫':'Guest Bath','玄关':'Foyer','阳台':'Balcony',
+  '浅木色人字拼':'Light Herringbone','灰白小方拼':'Grey-white Mosaic',
   '子女房':"Children's Room", '厨房':'Kitchen', '餐厅':'Dining', '过道':'Hallway', '客厅':'Living Room', '休闲阳台':'Leisure Balcony',
   '主卧飘窗':'Master Bay Window', '子女房飘窗':"Children's Bay Window",
   '橡木地板':'Oak Flooring', '胡桃木地板':'Walnut Flooring', '800 地砖':'800 Tile', '600 地砖':'600 Tile', '大理石':'Marble',
@@ -394,6 +396,8 @@ const WALLS = PLAN.walls, WINS = PLAN.windows, DOORS = PLAN.doors;
 const SLIDES = PLAN.slides, ROOMS = PLAN.rooms;
 const MATS = {
   wood:    {name:'橡木地板', price:320, sw:'#d8b88a'},
+  herringbone:{name:'浅木色人字拼', price:360, sw:'#d9cbb4'},
+  mosaic:  {name:'灰白小方拼', price:200, sw:'#d1cfca'},
   walnut:  {name:'胡桃木地板', price:380, sw:'#9b7250'},
   tile800: {name:'800 地砖', price:220, sw:'#ebe6dc'},
   tile600: {name:'600 地砖', price:160, sw:'#dfe3e1'},
@@ -436,7 +440,8 @@ const typeColor = t => { for (const c of LIB) for (const i of c.items) if (i[0]=
 
 let _n = 1;
 const uid = () => 'f' + Date.now().toString(36) + (_n++);
-const F = (type,name,cx,cy,w,d,rot=0,color) => ({id:uid(),type,name,cx,cy,w,d,rot,color:color||typeColor(type)});
+const F = (type,name,cx,cy,w,d,rot=0,color) => ({id:uid(),type,name,cx,cy,w,d,rot,color:color||typeColor(type),
+  style:name==='精装吧台'?'developer-bar':name==='带壁龛玄关柜'?'developer-entry':name.startsWith('精装')?'developer-cabinet':undefined});
 
 function defaultFurniture(){ return PLAN.furniture.map(f => F(...f)); }
 
@@ -445,7 +450,7 @@ function defaultState(){
   return {floorplanId:PLAN.id, schemaVersion:1, furniture:defaultFurniture(), rooms, demolished:[], measures:[]};
 }
 
-const STORE = 'floorplan-77b-wall-revision-v2';
+const STORE = 'floorplan-77b-developer-fitout-v3';
 function load(){
   try { const s = JSON.parse(localStorage.getItem(STORE)); if (s && Array.isArray(s.furniture)) return fixState(s); } catch(e) {}
   return null;
@@ -463,7 +468,8 @@ function fixState(s){
         || typeof f.color !== 'string' || !/^#[0-9a-f]{6}$/i.test(f.color))
       throw new Error('家具数据无效');
     ids.add(f.id);
-    return {id:f.id,type:f.type,name:f.name,cx:f.cx,cy:f.cy,w:f.w,d:f.d,rot:f.rot,color:f.color};
+    return {id:f.id,type:f.type,name:f.name,cx:f.cx,cy:f.cy,w:f.w,d:f.d,rot:f.rot,color:f.color,
+      style:['developer-bar','developer-entry','developer-cabinet'].includes(f.style)?f.style:undefined};
   });
   const rooms = d.rooms;
   for (const r of ROOMS){
@@ -527,7 +533,9 @@ function buildDefs(){
   const tile = (id,size,base,line) => `<pattern id="m-${id}" patternUnits="userSpaceOnUse" width="${size}" height="${size}">
       <rect width="${size}" height="${size}" fill="${base}"/><path d="M0 0H${size}M0 0V${size}" stroke="${line}" stroke-width="10"/></pattern>`;
   $('#defs').innerHTML =
-    plank('wood','#dcc09a','#bf9d70') + plank('walnut','#a57c56','#80593a') +
+    plank('wood','#e0d0b8','#cbbba3') + plank('walnut','#a57c56','#80593a') +
+    `<pattern id="m-herringbone" patternUnits="userSpaceOnUse" width="720" height="720" patternTransform="rotate(45)"><rect width="720" height="720" fill="#dfd3bd"/><path d="M0 0H540V180H180V540H0ZM720 180V720H540V360H180V180Z" fill="#d8c9b0" stroke="#c6b89f" stroke-width="5"/><path d="M0 360H180M360 0V180M360 360V720M540 540H720" stroke="#c6b89f" stroke-width="5"/></pattern>
+    <pattern id="m-mosaic" patternUnits="userSpaceOnUse" width="240" height="240" patternTransform="rotate(45)"><rect width="240" height="240" fill="#eae7df"/><rect x="80" y="80" width="80" height="80" fill="#a5a5a0"/><path d="M0 0H240M0 0V240" stroke="#cbc7bf" stroke-width="4"/></pattern>` +
     tile('tile800',800,'#ece7de','#d3cabb') + tile('tile600',600,'#e2e6e3','#c4cbc6') + tile('antislip',300,'#d6dbd7','#b3bab4') +
     `<pattern id="m-marble" patternUnits="userSpaceOnUse" width="1200" height="1200">
       <rect width="1200" height="1200" fill="#f3f0ea"/><path d="M0 0H1200M0 0V1200" stroke="#dcd5c8" stroke-width="10"/>
@@ -1451,7 +1459,7 @@ buildDefs(); buildLib(); renderOpenings(); renderDims();
 $('#tip').textContent = TIPS()['2d'];
 fitView(); renderAll();
 </script>
-<script src="./77b-interface.js"></script>
+<script src="./77b-interface.js?v=3"></script>
 <script type="module">
 /* ============================================================
  *  3D 场景（three.js）—— 与 2D 共用 state / ui，切换时带过渡动画：
@@ -1465,6 +1473,7 @@ import {PointerLockControls} from 'three/addons/controls/PointerLockControls.js'
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {CSS2DRenderer, CSS2DObject} from 'three/addons/renderers/CSS2DRenderer.js';
+import {buildDeveloperFinishes, finishMaterial} from './77b-finishes.js?v=3';
 
 const stage = $('#stage'), host = $('#view3d');
 const [OX, OY] = PLAN.center;
@@ -1592,7 +1601,8 @@ function rng(seed){ return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let 
 const rgbK = (hex, k) => { const n = parseInt(hex.slice(1), 16); const f = v => Math.max(0, Math.min(255, Math.round(v*k))); return `rgb(${f(n>>16&255)},${f(n>>8&255)},${f(n&255)})`; };
 // 地面贴图按真实尺寸平铺（UV 单位 = 米）
 const TEX = {
-  wood:{sx:1.8, sy:.36, base:'#d6b58a', rough:.55}, walnut:{sx:1.8, sy:.36, base:'#9a6f4b', rough:.5},
+  wood:{sx:1.8, sy:.36, base:'#ddd0ba', rough:.55}, walnut:{sx:1.8, sy:.36, base:'#9a6f4b', rough:.5},
+  herringbone:{sx:1.44,sy:1.44,base:'#dfd1b8',rough:.52}, mosaic:{sx:.48,sy:.48,base:'#e5e2da',rough:.65},
   tile800:{sx:.8, sy:.8, base:'#ebe6dd', grout:'#cfc6b7', rough:.3}, tile600:{sx:.6, sy:.6, base:'#dfe3e0', grout:'#bfc6c1', rough:.35},
   antislip:{sx:.3, sy:.3, base:'#d3d8d4', grout:'#aab2ac', rough:.8}, marble:{sx:1.2, sy:1.2, base:'#f2efe9', grout:'#d9d2c4', rough:.18},
   terrazzo:{sx:.5, sy:.5, base:'#e6dfd3', rough:.4}, carpet:{sx:.3, sy:.3, base:'#c6bfd2', rough:1},
@@ -1618,6 +1628,26 @@ function floorMat(kind){
       });
       g.fillStyle = rgbK(s.base, .62); g.fillRect(0, r*rowH, W, 2.5);
     }
+  } else if (kind === 'herringbone'){
+    // Periodic parquet: interlocking perpendicular planks, shown diagonally.
+    g.translate(W/2,Hh/2); g.rotate(Math.PI/4); g.translate(-W/2,-Hh/2);
+    const b=W/8;
+    for(let row=-12;row<20;row++)for(let col=-12;col<20;col++){
+      if((row-col)%4!==0) continue;
+      const x=col*b,y=row*b;
+      g.fillStyle=rgbK(s.base,.95+R()*.08); g.fillRect(x,y,3*b,b);
+      g.strokeStyle='#c8bba4';g.lineWidth=.7;g.strokeRect(x,y,3*b,b);
+      g.fillStyle=rgbK(s.base,.92+R()*.09);g.fillRect(x+3*b,y,b,3*b);
+      g.strokeRect(x+3*b,y,b,3*b);
+      g.strokeStyle='rgba(135,113,81,.14)';
+      for(let k=1;k<5;k++){g.beginPath();g.moveTo(x+2,y+k*b/5);g.lineTo(x+3*b-2,y+k*b/5+R()*2);g.stroke();}
+    }
+  } else if (kind === 'mosaic'){
+    g.fillStyle='#e9e6de';g.fillRect(0,0,W,Hh);
+    const b=W/6;g.fillStyle='#a7a7a2';
+    for(let y=b;y<Hh;y+=3*b)for(let x=b;x<W;x+=3*b)g.fillRect(x,y,b,b);
+    g.strokeStyle='#cbc7bf';g.lineWidth=1;
+    for(let k=0;k<=6;k++){g.beginPath();g.moveTo(k*b,0);g.lineTo(k*b,Hh);g.moveTo(0,k*b);g.lineTo(W,k*b);g.stroke();}
   } else if (kind === 'marble'){
     g.strokeStyle = 'rgba(160,150,135,.35)';
     for (let k = 0; k < 6; k++){ g.lineWidth = 1 + R()*3; g.beginPath(); g.moveTo(R()*W, 0); g.bezierCurveTo(R()*W, R()*Hh, R()*W, R()*Hh, R()*W, Hh); g.stroke(); }
@@ -1733,6 +1763,11 @@ const plate = (g, r, x, y, z) => g.add(lathe([[0, 0], [r*.6, 0], [r*.72, .008], 
 
 /* ======================= 家具模型（局部坐标：背面朝 -z） ======================= */
 function buildFurniture(f){
+  const fittedFinish = kind => {
+    const base=finishMaterial(kind,THREE);
+    const original=f.style==='developer-entry'?'#a18b72':f.style==='developer-bar'?'#b5a28a':f.type==='vanity'?'#a18b72':'#d4cfc4';
+    return f.color===original?base:mat(f.color,{map:base.map,roughness:base.roughness});
+  };
   const g = new THREE.Group(), w = M(f.w), d = M(f.d), c = f.color || '#ddd', bz = -d/2, R = rng(Math.round(f.w*7 + f.d*13 + f.cx + f.cy));
   switch (f.type){
     case 'bed': {
@@ -1790,7 +1825,7 @@ function buildFurniture(f){
       break;
     }
     case 'wardrobe': case 'cabinet': case 'shoecab': {
-      const cm = mat(c, {roughness:.55}), fz = d/2 - .02;
+      const cm = f.style==='developer-entry'?fittedFinish('veneer'):mat(c, {roughness:.55}), fz = d/2 - .02;
       if (f.type === 'wardrobe'){
         const h = 2.2, n = Math.max(1, Math.round(w/.5));
         g.add(box(w - .02, .08, d - .06, '#4a4641', 0, 0, -.03), box(w, h - .08, d - .02, cm, 0, .08, -.01));
@@ -1801,8 +1836,10 @@ function buildFurniture(f){
         g.add(box(w, h - y0, d - .02, cm, 0, y0, -.01), box(w - .04, .01, .03, glowMat('#fff7e6', '#ffe9c4', .8), 0, y0 - .01, fz - .06));   // 悬空 + 底部灯带
         fronts(g, -w/2, y0, w, h - y0, fz, n, 1, cm, 'edge');
         g.add(rbox(w + .01, .025, d, woodM(darker(c, .8)), 0, h, 0, .006));
-        g.add(rbox(.22, .015, .14, woodM('#6b543f'), -w*.25, h + .025, 0, .006));
-        vase(g, w*.28, h + .025, -.03, .05, .2, '#d8cfc2', R);
+        if(f.style!=='developer-entry'){
+          g.add(rbox(.22, .015, .14, woodM('#6b543f'), -w*.25, h + .025, 0, .006));
+          vase(g, w*.28, h + .025, -.03, .05, .2, '#d8cfc2', R);
+        }
       } else {
         const h = .85, n = Math.max(1, Math.round(w/.5));
         legs(g, w, d, .1, woodM('#3a3027'), .05, .016);
@@ -1949,6 +1986,14 @@ function buildFurniture(f){
       break;
     }
     case 'counter': {
+      if(f.style?.startsWith('developer')){
+        const cm=f.style==='developer-bar'?fittedFinish('veneer'):fittedFinish('cabinet');
+        const n=Math.max(1,Math.round(w/.6)),fz=d/2-.025;
+        g.add(box(w-.02,.08,d-.08,'#383631',0,0,-.04),box(w,.74,d-.03,cm,0,.08,-.015));
+        fronts(g,-w/2,.08,w,.74,fz,n,1,cm,'edge');
+        g.add(box(w+.01,.04,d,finishMaterial('stone',THREE),0,.82,0));
+        break;
+      }
       const cm = mat(c, {roughness:.45}), stone = mat('#dcd7cf', {roughness:.22}), n = Math.max(1, Math.round(w/.6)), fz = d/2 - .04;
       g.add(box(w - .01, .1, d - .1, '#4a4641', 0, 0, -.05), box(w, .72, d - .04, cm, 0, .1, -.02));
       fronts(g, -w/2, .64, w, .18, fz, n, 1, cm, 'bar'); fronts(g, -w/2, .1, w, .54, fz, n, 1, cm, 'bar', .56);
@@ -2007,14 +2052,16 @@ function buildFurniture(f){
       break;
     }
     case 'vanity': {
-      const vm = mat(c, {roughness:.5}), stone = mat('#fafafa', {roughness:.18}), nb = w >= 1.1 ? 2 : 1, cd = d - .04, cm = chrome();
+      const vm = f.style?.startsWith('developer')?fittedFinish('veneer'):mat(c, {roughness:.5}), stone = mat('#fafafa', {roughness:.18}), nb = w >= 1.1 ? 2 : 1, cd = d - .04, cm = chrome();
       g.add(rbox(w, .45, cd, vm, 0, .33, bz + cd/2, .008));
       fronts(g, -w/2 + .005, .335, w - .01, .44, d/2 - .04, nb, 2, vm, 'edge');
       g.add(rbox(w, .03, d, stone, 0, .78, 0, .006));
       const rb = Math.min(.19, w/nb*.36);
       for (let i = 0; i < nb; i++){
         const x = nb === 1 ? 0 : (i ? w/4 : -w/4);
-        g.add(lathe([[0, 0], [rb*.55, 0], [rb*.85, .03], [rb, .1], [rb*.97, .12]], ceramic({side:THREE.DoubleSide}), x, .81, .03, 40), cyl(.018, .018, .003, cm, x, .812, .03, 16));
+        if(f.style?.startsWith('developer')){
+          g.add(shell(Math.min(w*.7,.6),d*.62,.012,.022,.018,stone,x,.802,.03),box(Math.min(w*.7,.6)-.044,.002,d*.62-.044,'#e2e4e2',x,.804,.03),cyl(.016,.016,.003,cm,x,.807,.03,16));
+        }else g.add(lathe([[0, 0], [rb*.55, 0], [rb*.85, .03], [rb, .1], [rb*.97, .12]], ceramic({side:THREE.DoubleSide}), x, .81, .03, 40), cyl(.018, .018, .003, cm, x, .812, .03, 16));
         g.add(cyl(.02, .022, .02, cm, x, .81, bz + .06, 16), tube([[x, .83, bz + .06], [x, 1.03, bz + .06], [x, 1.07, bz + .11], [x, 1.03, bz + .15]], .01, cm), rot(box(.01, .01, .06, cm, x, 1.05, bz + .04), .4));
       }
       const mw = Math.min(w*.9, nb*.7);
@@ -2249,7 +2296,8 @@ function buildArch(){
     const cg = new THREE.ShapeGeometry(shapeOf(r.poly, true)); cg.rotateX(Math.PI/2);
     const ceil = new THREE.Mesh(cg, mat('#fbfaf7', {roughness:1})); ceil.position.y = H; ceil.visible = top >= H; archUp.add(ceil);
     if (r.at){
-      const lamp = new THREE.Mesh(new THREE.CylinderGeometry(.22, .22, .02, 32), new THREE.MeshStandardMaterial({color:'#fff', emissive:'#fff2d6', emissiveIntensity:.3}));
+      const lamp = new THREE.Mesh(new THREE.CircleGeometry(.07, 24), new THREE.MeshStandardMaterial({color:'#fff', emissive:'#fff2d6', emissiveIntensity:.3,side:THREE.FrontSide}));
+      lamp.rotation.x=Math.PI/2;
       lamp.position.set(wx(r.at[0]), H - .012, wz(r.at[1])); lamp.visible = top >= H; lampG.add(lamp);
       const pl = new THREE.PointLight(0xffd9a8, 0, 7, 1.6); pl.position.set(wx(r.at[0]), H - .25, wz(r.at[1])); lampG.add(pl);
     }
@@ -2257,7 +2305,7 @@ function buildArch(){
   [...DOORS, ...SLIDES].forEach(d => { const [x0, y0, x1, y1] = d.rect; const s = box(M(x1-x0), .012, M(y1-y0), mat('#d8d0c0', {roughness:.3}), wx((x0+x1)/2), 0, wz((y0+y1)/2)); s.castShadow = false; archFloor.add(s); });
   WALLS.forEach((w, i) => {
     if (state.demolished.includes('w'+i)) return;
-    wallBox(w, 0, w[4] === 'low' ? Math.min(1, top) : top);
+    wallBox(w, 0, w[4] === 'low' ? Math.min((w[5] || 1000)/1000, top) : top);
     colliders.push([wx(w[0]), wz(w[1]), wx(w[2]), wz(w[3])]);
   });
   // 门洞、飘窗洞口上方过梁
@@ -2281,20 +2329,21 @@ function buildArch(){
     const leaf = box(L, dh, .04, mat(d.entry ? '#6b4f3a' : '#efe6d8', {roughness:.5}), L/2);
     const knob = new THREE.Mesh(new THREE.SphereGeometry(.03, 12, 8), metal()); knob.position.set(L - .07, Math.min(1, dh - .05), 0); knob.scale.z = 2.2;
     pivot.add(leaf, knob);
-    const ang = v => Math.atan2(-v[1], v[0]), door = {pivot, a0:ang(d.c), a1:ang(d.o), open:true, len:L};
+    const ang = v => Math.atan2(-v[1], v[0]), door = {pivot, a0:ang(d.c), a1:ang(d.o), open:!d.entry, len:L};
     if (door.a1 - door.a0 > Math.PI) door.a1 -= Math.PI*2; if (door.a0 - door.a1 > Math.PI) door.a1 += Math.PI*2;
-    door.cur = door.a1; pivot.rotation.y = door.cur; leaf.userData.door = knob.userData.door = door;
+    door.cur = door.open ? door.a1 : door.a0; pivot.rotation.y = door.cur; leaf.userData.door = knob.userData.door = door;
     doors.push(door); archUp.add(pivot);
   });
-  SLIDES.forEach(({rect:[x0, y0, x1, y1], v}) => {
+  SLIDES.forEach(({rect:[x0, y0, x1, y1], v, frosted}) => {
     const L = M(v ? y1-y0 : x1-x0), ph = Math.min((PLAN.slides.find(s => s.rect[0] === x0 && s.rect[1] === y0)?.height || 2100)/1000, top), pl = L*.55;
     [[-1, -.02], [1, .02]].forEach(([s, off]) => {
       const c = s < 0 ? -L/2 + pl/2 : L/2 - pl/2, x = v ? wx((x0+x1)/2) + off : wx(x0) + L/2 + c, z = v ? wz(y0) + L/2 + c : wz((y0+y1)/2) + off;
-      const p = new THREE.Mesh(new THREE.BoxGeometry(v ? .02 : pl, ph, v ? pl : .02), glassMat); p.position.set(x, ph/2, z); archUp.add(p);
+      const p = new THREE.Mesh(new THREE.BoxGeometry(v ? .02 : pl, ph, v ? pl : .02), frosted ? finishMaterial('frosted',THREE) : glassMat); p.position.set(x, ph/2, z); archUp.add(p);
       [ph - .03, .03].forEach(y => { const fr = new THREE.Mesh(new THREE.BoxGeometry(v ? .04 : pl, .05, v ? pl : .04), frameMat); fr.position.set(x, y, z); archUp.add(fr); });
       [-1, 1].forEach(e => { const fr = new THREE.Mesh(new THREE.BoxGeometry(.04, ph, .04), frameMat); fr.position.set(v ? x : x + e*pl/2, ph/2, v ? z + e*pl/2 : z); archUp.add(fr); });
     });
   });
+  buildDeveloperFinishes({THREE,PLAN,archUp,archFloor,top,H,wx,wz,M,box,mat,glassMat,frameMat,activeWalls:WALLS.filter((w,i)=>!state.demolished.includes('w'+i))});
   applyLight(); applyGrow();
 }
 
