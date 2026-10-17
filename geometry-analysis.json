@@ -1,0 +1,418 @@
+{
+  "schemaVersion": 1,
+  "title": "77B 图纸尺寸追溯及右墙修订 v2",
+  "units": "mm",
+  "sourcePriority": [
+    {
+      "source": "image1",
+      "role": "开发商尺寸及原格局唯一尺寸来源"
+    },
+    {
+      "source": "image2",
+      "role": "房间关系及本次右侧墙体轮廓的参考；墙体偏移是拟合值，阳台分界仍按image1"
+    },
+    {
+      "source": "image3",
+      "role": "用户明确指出数据错误，禁止用于模型尺寸"
+    }
+  ],
+  "coordinateSystem": {
+    "origin": "图1 9-5 竖轴与 9-L 横轴的交点",
+    "x": "向右",
+    "y": "向下",
+    "xAxisStations": [
+      {
+        "axis": "9-5",
+        "value": 0
+      },
+      {
+        "axis": "9-8",
+        "value": 2900
+      },
+      {
+        "axis": "9-9",
+        "value": 5300
+      },
+      {
+        "axis": "9-12",
+        "value": 7600
+      },
+      {
+        "axis": "9-15",
+        "value": 11100
+      }
+    ],
+    "xAxisSpans": [
+      2900,
+      2400,
+      2300,
+      3500
+    ],
+    "yAxisStations": [
+      {
+        "axis": "9-M",
+        "value": -1350
+      },
+      {
+        "axis": "9-L",
+        "value": 0
+      },
+      {
+        "axis": "9-K",
+        "value": 1750
+      },
+      {
+        "axis": "9-H",
+        "value": 2650
+      },
+      {
+        "axis": "9-G",
+        "value": 3900
+      },
+      {
+        "axis": "9-F",
+        "value": 4500
+      },
+      {
+        "axis": "9-D",
+        "value": 5550
+      },
+      {
+        "axis": "9-B",
+        "value": 8350
+      },
+      {
+        "axis": "9-A",
+        "value": 10950
+      }
+    ],
+    "yAxisSpansFrom9M": [
+      1350,
+      1750,
+      900,
+      1250,
+      600,
+      1050,
+      2800,
+      2600
+    ],
+    "stationNote": "上述为开发商轴线间距，不能直接当成各房间净尺寸或户型外包尺寸。"
+  },
+  "readableDimensionLabels": [
+    {
+      "object": "主卧主体",
+      "width": 2600,
+      "depth": 3850,
+      "source": "image1",
+      "confidence": "high",
+      "note": "3850为主卧内一段标注；北侧另有600衣柜区，南侧另标300飘窗，房间存在入户侧扩展形状。"
+    },
+    {
+      "object": "左次卧（图1次卧二）",
+      "width": 2200,
+      "depth": 2800,
+      "wardrobeDepth": 600,
+      "southBayDepth": 300,
+      "source": "image1",
+      "confidence": "high"
+    },
+    {
+      "object": "右次卧（图1次卧一）",
+      "width": 2200,
+      "depth": 2700,
+      "wardrobeDepth": 600,
+      "southBayDepth": 300,
+      "source": "image1",
+      "confidence": "high"
+    },
+    {
+      "object": "两次卧之间墙体",
+      "thickness": 200,
+      "source": "image1",
+      "confidence": "high"
+    },
+    {
+      "object": "主卫",
+      "width": 2450,
+      "depth": 1550,
+      "source": "image1",
+      "confidence": "high"
+    },
+    {
+      "object": "客卫",
+      "width": 2450,
+      "depth": 1550,
+      "source": "image1",
+      "confidence": "high"
+    },
+    {
+      "object": "过道",
+      "depth": 1050,
+      "source": "image1",
+      "confidence": "high"
+    },
+    {
+      "object": "厨房",
+      "width": 1900,
+      "depth": 2450,
+      "source": "image1",
+      "confidence": "medium",
+      "note": "2450竖向文字较模糊，宜在原始CAD或更高清图中复核。"
+    },
+    {
+      "object": "玄关",
+      "width": 1500,
+      "source": "image1",
+      "confidence": "high"
+    },
+    {
+      "object": "厨房加玄关",
+      "width": 3400,
+      "source": "image1",
+      "confidence": "high"
+    },
+    {
+      "object": "餐厅局部标注",
+      "width": 2875,
+      "depth": 1700,
+      "source": "image1",
+      "confidence": "medium",
+      "note": "餐客厅相通，不能把此尺寸当成完整餐厅封闭边界。"
+    },
+    {
+      "object": "客厅",
+      "width": 3200,
+      "depth": 2800,
+      "source": "image1",
+      "confidence": "high",
+      "note": "竖字旋转90度复核为2800。"
+    },
+    {
+      "object": "阳台",
+      "depthLabel": 1600,
+      "source": "image1",
+      "confidence": "high",
+      "note": "竖字旋转90度复核为1600，标线端点取门窗侧与南侧外缘，不称为净深。"
+    }
+  ],
+  "suggestedModelPlanes": {
+    "status": "建议拟合值，不是开发商逐点坐标",
+    "masterSleepingRectangle": {
+      "x1": 150,
+      "x2": 2750,
+      "y1": 4500,
+      "y2": 8350
+    },
+    "masterWardrobeRectangle": {
+      "x1": 150,
+      "x2": 2350,
+      "y1": 3900,
+      "y2": 4500
+    },
+    "masterEntryExtensionRectangle": {
+      "x1": 2750,
+      "x2": 4200,
+      "y1": 4500,
+      "y2": 5550
+    },
+    "bedroomTwoRectangle": {
+      "x1": 3050,
+      "x2": 5250,
+      "y1": 5550,
+      "y2": 8350
+    },
+    "bedroomOneRectangle": {
+      "x1": 5450,
+      "x2": 7650,
+      "y1": 5650,
+      "y2": 8350
+    },
+    "mainBathroomRectangle": {
+      "x1": 2600,
+      "x2": 5050,
+      "y1": 2800,
+      "y2": 4350
+    },
+    "guestBathroomRectangle": {
+      "x1": 5250,
+      "x2": 7700,
+      "y1": 2800,
+      "y2": 4350
+    },
+    "hallRectangle": {
+      "x1": 4200,
+      "x2": 7900,
+      "y1": 4500,
+      "y2": 5550
+    },
+    "kitchenRectangle": {
+      "x1": 7750,
+      "x2": 9650,
+      "y1": 150,
+      "y2": 2600
+    },
+    "vestibuleWidthRange": {
+      "x1": 9650,
+      "x2": 11150,
+      "note": "北段保留1500标注宽；y1900之后东侧内墙收进至10850，实际运行以floorplan-data.js的entry多边形为准。"
+    },
+    "livingRectangle": {
+      "x1": 7950,
+      "x2": 11150,
+      "y1": 5550,
+      "y2": 8350
+    },
+    "balconyDepthRange": {
+      "y1": 8350,
+      "y2": 9950
+    },
+    "southBayDepthRange": {
+      "y1": 8350,
+      "y2": 8650
+    },
+    "planeNote": "各净尺寸先满足读图标注，外墙及墙中心位置再用轴线和像素形状拟合。局部墙面存在50至200毫米的拟合差，不能宣称施工精度；实际实现可依统一坐标体系调整这些拟合面。 v2东侧玄关/餐厅改为阶梯多边形，旧净矩形建议仅为初版分析记录。"
+  },
+  "imagePixelCalibration": {
+    "sourceImageSize": [
+      1886,
+      817
+    ],
+    "pixelAnchor": {
+      "x9_5": 697,
+      "x9_8": 825,
+      "x9_9": 930,
+      "x9_12": 1030,
+      "x9_15": 1184,
+      "y9_L": 111,
+      "y9_K": 188,
+      "y9_H": 227,
+      "y9_G": 282,
+      "y9_F": 308,
+      "y9_D": 355,
+      "y9_B": 478,
+      "y9_A": 591
+    },
+    "approximateMmPerPixel": 22.73,
+    "formula": "x≈(pixelX-697)*22.73; y≈(pixelY-111)*22.73",
+    "note": "只用于复原轮廓与未标注开口位置；不把像素插值得到的尺寸或面积冒充开发商标注。"
+  },
+  "openings": [
+    {
+      "object": "入户门",
+      "location": "北侧玄关上边，向室内开启",
+      "width": null,
+      "source": "image1",
+      "certainty": "位置明确，门宽未清晰标注"
+    },
+    {
+      "object": "主卧门",
+      "location": "主卧上部扩展区与过道相接的竖向隔断",
+      "width": null,
+      "source": "image1",
+      "certainty": "开门关系明确，门宽采用演示拟合值"
+    },
+    {
+      "object": "两次卧门",
+      "location": "各卧室北侧，面向过道，向卧室内部开启",
+      "width": null,
+      "source": "image1",
+      "certainty": "位置明确，门宽未清晰标注"
+    },
+    {
+      "object": "两卫门",
+      "location": "各卫生间南侧，向卫生间内部开启；左卫靠左、右卫靠右",
+      "width": null,
+      "source": "image1",
+      "certainty": "位置明确，门宽未清晰标注"
+    },
+    {
+      "object": "卫生间窗",
+      "location": "两卫北侧朝天井侧，窄窗",
+      "width": null,
+      "source": "image1",
+      "certainty": "位置明确，窗宽及窗台高未标注"
+    },
+    {
+      "object": "主卧窗/飘窗",
+      "location": "西侧分段开窗、南侧300飘窗，北侧衣柜上方亦有窗线",
+      "width": null,
+      "source": "image1",
+      "certainty": "开口区段按像素拟合"
+    },
+    {
+      "object": "次卧南窗",
+      "location": "两次卧南侧300飘窗",
+      "width": null,
+      "source": "image1",
+      "certainty": "300标注明确，横向开口宽度拟合"
+    },
+    {
+      "object": "客厅阳台门",
+      "location": "客厅南侧与独立阳台之间的通长门窗线",
+      "width": null,
+      "source": "image1",
+      "certainty": "位置明确，门扇分格及开口宽度拟合"
+    }
+  ],
+  "referenceConflict": {
+    "image1": "客厅在右侧南部；客厅南边仅一段较浅阳台，有独立门窗分隔。",
+    "image2": "客厅下侧整块较大区域标为阳台，最南另标花池；其阳台布局与图1不同。",
+    "decision": "本次按用户补充墙体图修正东侧内凹、外凸和回收；已标尺寸仍取image1。阳台分界仍按image1，不凭补充图扩大阳台或增加花池。"
+  },
+  "unknowns": [
+    "精确层高、窗台高、门窗高及梁高，图片未给出；3D须显式使用演示默认值。",
+    "门窗洞口宽度及完整墙厚链未逐一标清，不宣称逐点施工精确。",
+    "北部厨房西北凹角含设备/服务区域，须依图1轮廓拟合，不当成可任意占用的室内地面。",
+    "图1面积文字有重叠，不据图片自行认定建筑面积、套内面积、赠送面积或使用率。",
+    "模型计算的多边形面积属于复原模型面积，不是开发商公示面积。"
+  ],
+  "wallRevision": {
+    "version": 2,
+    "modelId": "77B-wall-revision-v2",
+    "reference": "references/layout-reference.png",
+    "status": "derived",
+    "mainInnerX": 11150,
+    "recessInnerX": 10850,
+    "projectionInnerX": 11450,
+    "turnY": [
+      1900,
+      3300,
+      4250
+    ],
+    "innerPath": [
+      [
+        11150,
+        150
+      ],
+      [
+        11150,
+        1900
+      ],
+      [
+        10850,
+        1900
+      ],
+      [
+        10850,
+        3300
+      ],
+      [
+        11450,
+        3300
+      ],
+      [
+        11450,
+        4250
+      ],
+      [
+        11150,
+        4250
+      ],
+      [
+        11150,
+        10000
+      ]
+    ],
+    "note": "约300mm偏移、转折坐标均为按补充图拟合，非开发商标注；阳台不在本次已实施变更范围。"
+  }
+}
